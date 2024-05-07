@@ -12,7 +12,7 @@ MAX_USER_GPT_TOKENS = 2000
 
 TESTER_ID = 1313337053
 
-HOME_DIR = '/home/student/YanGPT_FinalVersion'
+HOME_DIR = '/home/student/YanGPT'
 
 LOGS = f'{HOME_DIR}/logs.txt'
 
