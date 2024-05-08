@@ -150,6 +150,7 @@ def handle_text(message: Message):
 
     except Exception as e:
         logging.error(e)
+        bot.send_message(message.from_user.id, e)
         bot.send_message(message.from_user.id,
                          "Не получилось ответить. Попробуй написать"
                          " другое сообщение")
