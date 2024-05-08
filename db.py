@@ -74,10 +74,12 @@ def add_message(user_id, full_message):
 
 def count_users(user_id):
     try:
-        sql_query = (f"SELECT COUNT(DISTINCT user_id) FROM {TABLE_NAME}"
-                     f" WHERE user_id <> ?"), (user_id,)
-        execute_selection_query(sql_query)
+        sql_query = (f"SELECT COUNT(DISTINCT user_id) FROM {TABLE_NAME} WHERE "
+                     f"user_id <> ?")
+        data = (user_id,)
+        return execute_selection_query(sql_query, data)
     except Exception as e:
+        print(e)
         logging.error(e)
         return None
 
@@ -87,7 +89,8 @@ def select_n_last_messages(user_id, n_last_messages=COUNT_LAST_MSG):
     total_spent_tokens = 0
     try:
         sql_query = ('''SELECT message, role, total_gpt_tokens FROM messages
-         WHERE user_id=? ORDER BY id DESC LIMIT ?''', (user_id, n_last_messages))
+         WHERE user_id=? ORDER BY id DESC LIMIT ?''',
+                     (user_id, n_last_messages))
         data = execute_selection_query(sql_query)
         if data and data[0]:
             for message in reversed(data):
@@ -113,4 +116,3 @@ def count_all_limits(user_id, limit_type):
     except Exception as e:
         logging.error(e)
         return 0
-

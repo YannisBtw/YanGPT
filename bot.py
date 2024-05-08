@@ -16,6 +16,7 @@ from db import prepare_db, add_message, select_n_last_messages
 
 logging.basicConfig(filename=LOGS, level=logging.ERROR, format=LOG_FORMAT,
                     filemode="w")
+
 bot = telebot.TeleBot(get_bot_token())
 prepare_db()
 
@@ -158,3 +159,6 @@ def handle_text(message: Message):
 def handler(message):
     bot.send_message(message.from_user.id, "Отправь мне голосовое или"
                                            " текстовое сообщение и бот ответит")
+
+
+bot.polling(none_stop=True)

@@ -52,5 +52,3 @@ def is_tts_symbol_limit(message, text):
         return None, "Общий лимий для взаимодействия со SpeechKit TTS превышен."
 
     return len(text)
-
-
