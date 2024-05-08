@@ -81,7 +81,7 @@ def count_users(user_id):
     except Exception as e:
         print(e)
         logging.error(e)
-        return None
+        return 0
 
 
 def select_n_last_messages(user_id, n_last_messages=COUNT_LAST_MSG):
