@@ -28,8 +28,7 @@ SYSTEM_PROMPT = [{'role': 'system',
 TOKENIZER_URL =\
     "https://llm.api.cloud.yandex.net/foundationModels/v1/tokenizeCompletion"
 
-GPT_URL =\
-    "https://llm.api.cloud.yandex.net/foundationModels/v1/tokenizeCompletion"
+GPT_URL = "https://llm.api.cloud.yandex.net/foundationModels/v1/completion"
 
 URL_SPEECHKIT_TTS = 'https://tts.api.cloud.yandex.net/speech/v1/tts:synthesize'
 
@@ -42,7 +41,7 @@ LANG = "ru-RU"
 
 VOICE = 'madirus'
 
-SPEED = 0.7
+SPEED = 1
 
 WELCOME_TEXT = ("Привет! Отправь текстовое сообщение с каким-то вопросом или "
                 "заданием и получи на него текстовый ответ или отправь "

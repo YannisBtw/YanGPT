@@ -26,9 +26,7 @@ def is_gpt_token_limit(messages, total_spent_tokens):
     return all_tokens, ""
 
 
-def is_stt_block_limit(message, duration):
-    user_id = message.from_user.id
-
+def is_stt_block_limit(user_id, duration):
     audio_blocks = math.ceil(duration / 15)
     all_blocks = count_all_limits(user_id, 'stt_blocks') + audio_blocks
 
@@ -39,7 +37,7 @@ def is_stt_block_limit(message, duration):
     if all_blocks >= MAX_USER_STT_BLOCKS:
         return None, "Превышен общий лимит SpeechKit STT"
 
-    return audio_blocks
+    return audio_blocks, None
 
 
 def is_tts_symbol_limit(message, text):
@@ -51,4 +49,4 @@ def is_tts_symbol_limit(message, text):
     if all_symbols >= MAX_USER_TTS_SYMBOLS:
         return None, "Общий лимий для взаимодействия со SpeechKit TTS превышен."
 
-    return len(text)
+    return len(text), None

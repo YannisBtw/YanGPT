@@ -1,5 +1,6 @@
 import logging
 import os
+import traceback
 
 import telebot
 from telebot.types import Message
@@ -12,13 +13,12 @@ from validators import (check_number_of_users, is_gpt_token_limit,
                         is_stt_block_limit, is_tts_symbol_limit)
 from config import (LOGS, LOG_FORMAT, TESTER_ID, WELCOME_TEXT,
                     COUNT_LAST_MSG)
-from db import prepare_db, add_message, select_n_last_messages
+from db import add_message, select_n_last_messages
 
 logging.basicConfig(filename=LOGS, level=logging.ERROR, format=LOG_FORMAT,
                     filemode="w")
 
 bot = telebot.TeleBot(get_bot_token())
-prepare_db()
 
 
 def create_keyboard(buttons: list[str]) -> ReplyKeyboardMarkup:
@@ -94,21 +94,18 @@ def handle_voice(message: Message):
             return
         total_gpt_tokens += tokens_in_answer
 
-        tts_symbols, error_message = is_tts_symbol_limit(user_id, answer_gpt)
+        tts_symbols, error_message = is_tts_symbol_limit(message, answer_gpt)
 
         recording = [answer_gpt, 'assistant', total_gpt_tokens, tts_symbols, 0]
         add_message(user_id=user_id, full_message=recording)
 
-        if error_message:
-            bot.send_message(user_id, error_message)
-            return
-
         status_tts, voice_response = text_to_speech(answer_gpt)
         if status_tts:
-            bot.send_message(user_id, voice_response,
-                             reply_to_message_id=message.id)
+            bot.send_voice(user_id, voice_response,
+                           reply_to_message_id=message.id)
         else:
-            bot.send_voice(user_id, answer_gpt, reply_to_message_id=message.id)
+            bot.send_message(user_id, answer_gpt,
+                             reply_to_message_id=message.id)
     except Exception as e:
         logging.error(e)
         bot.send_message(user_id, "Не получилось ответить."
@@ -150,7 +147,6 @@ def handle_text(message: Message):
 
     except Exception as e:
         logging.error(e)
-        bot.send_message(message.from_user.id, e)
         bot.send_message(message.from_user.id,
                          "Не получилось ответить. Попробуй написать"
                          " другое сообщение")
